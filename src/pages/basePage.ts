@@ -19,7 +19,8 @@ export class BasePage {
   }
 
   async verifyHeader(header:HeaderTitle) {
-    await expect(this.headerTitle).toBeVisible();
-    await expect(this.headerTitle).toContainText(header)
+    const title = this.headerTitle.first()
+    await expect(title).toBeVisible();
+    await expect(title).toContainText(header)
   }
 }
