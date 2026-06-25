@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test' 
+import { test as base, expect, Locator } from '@playwright/test' 
 import {LoginPage } from '../pages/loginPage'
 import {DashboardPage} from '../pages/dashboardPage'
 
@@ -16,5 +16,5 @@ export const test = base.extend<PageFixtures>({
     }
 })
 
-export { expect }
+export { expect, Locator }
 
