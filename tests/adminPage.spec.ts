@@ -1,5 +1,5 @@
 import {test, expect} from '../src/fixtures/page.fixtures'
-import { sideNavigation, headerTitle, loginCreds } from '../src/test-data'
+import { sideNavigation, headerTitle, loginCreds, createAdminUser } from '../src/test-data'
 
 test.describe('admin tests', () => {
     test.beforeEach(async ({ page, dashboardPage }) => {
@@ -10,9 +10,31 @@ test.describe('admin tests', () => {
     
     test('navigate to admin page', async({ dashboardPage, loginPage }) =>{
         await dashboardPage.navigateThroughSideBar(sideNavigation.admin)
-        // await loginPage.login(loginCreds.userName, loginCreds.password);
         const title = await dashboardPage.verifyHeader(headerTitle.admin)
     })
+
+    test('Create Admin User', async ({
+
+    dashboardPage,
+    adminPage,
+    loginPage
+
+}) => {
+
+    const user = createAdminUser();
+
+    await dashboardPage.navigateThroughSideBar(sideNavigation.admin);
+
+    // await loginPage.login();
+
+    await adminPage.createUser(user);
+
+    await adminPage.searchUser(user.username);
+
+    await expect(
+        adminPage.userRow(user.username)
+    ).toBeVisible();
+});
 
 
 }) 
