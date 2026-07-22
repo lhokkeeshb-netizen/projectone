@@ -26,12 +26,10 @@ export type AdminUser = {
 };
 
 export function createAdminUser(): AdminUser {
-
     const random = Date.now();
-
     return {
         userRole: userRole.admin,
-        employeeName: 'Paul Collings',
+        employeeName: 'P',
         status: status.enabled,
         username: `admin${random}`,
         password: `Admin@${random}`
