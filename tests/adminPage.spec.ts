@@ -13,28 +13,11 @@ test.describe('admin tests', () => {
         const title = await dashboardPage.verifyHeader(headerTitle.admin)
     })
 
-    test('Create Admin User', async ({
-
-    dashboardPage,
-    adminPage,
-    loginPage
-
-}) => {
-
+    test('Create Admin User', async ({dashboardPage,adminPage,loginPage}) => {
     const user = createAdminUser();
-
     await dashboardPage.navigateThroughSideBar(sideNavigation.admin);
-
-    // await loginPage.login();
-
     await adminPage.createUser(user);
-
     await adminPage.searchUser(user.username);
-
-    await expect(
-        adminPage.userRow(user.username)
-    ).toBeVisible();
+    await expect(adminPage.userRow(user.username)).toBeVisible();
 });
-
-
 }) 
