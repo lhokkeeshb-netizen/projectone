@@ -17,7 +17,7 @@ export const status = {
     disabled: "Disabled",
 } as const
 
-export type AdminUser = {
+export type SystemUser = {
     userRole: string;
     employeeName: string;
     status: string;
@@ -25,10 +25,10 @@ export type AdminUser = {
     password: string;
 };
 
-export function createAdminUser(): AdminUser {
-    const random = Date.now();
+export function createAdminOrEssUser(role: string): SystemUser {
+    const random = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
     return {
-        userRole: userRole.admin,
+        userRole: role,
         employeeName: 'P',
         status: status.enabled,
         username: `admin${random}`,
