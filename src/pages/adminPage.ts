@@ -1,6 +1,6 @@
 import { BasePage } from './basePage';
 import { expect } from '../fixtures/page.fixtures';
-import { AdminUser } from '../test-data'
+import { SystemUser } from '../test-data'
 
 export class AdminPage extends BasePage {
     // Locators
@@ -16,6 +16,7 @@ export class AdminPage extends BasePage {
     get searchButton() {return this.page.getByRole('button', {name: 'Search', exact: true})}
     userRow(username: string) {return this.page.locator(`//div[@role='row'][.//*[normalize-space()='${username}']]`)}
     deleteUserRow(username: string) {return this.userRow(username).locator('button:has(.bi-trash)')}
+    editUserRow(username: string) {return this.userRow(username).locator('button:has(.bi-pencil-fill)')}
 
     // Methods
     async selectDropdown(label: string, option: string) {
@@ -23,7 +24,7 @@ export class AdminPage extends BasePage {
         await this.page.locator(`//div[@role='option']//span[normalize-space()='${option}']`).click();
     }
 
-    async createUser(user: AdminUser) {
+    async createUser(user: SystemUser) {
         await this.addButton.first().click()
         await this.waitFor()
         await expect(this.addUserHeader).toBeVisible();
@@ -45,6 +46,27 @@ export class AdminPage extends BasePage {
         await this.waitFor()
         await this.searchUsername.fill(username);
         await this.searchButton.click();
+    }
+
+    async editUser(username: string, updates: Partial<SystemUser>) {
+        await this.editUserRow(username).click();
+        await this.page.waitForLoadState('domcontentloaded');
+
+        if (updates.userRole) {
+            await this.selectDropdown('User Role', updates.userRole);
+        }
+        if (updates.status) {
+            await this.selectDropdown('Status', updates.status);
+        }
+        if (updates.username) {
+        await this.username.fill(updates.username);
+        }
+        if (updates.password) {
+            await this.password.fill(updates.password);
+            await this.confirmPassword.fill(updates.password);
+        }
+        await this.saveButton.click();
+        await this.page.waitForLoadState('domcontentloaded')
     }
 
 }
