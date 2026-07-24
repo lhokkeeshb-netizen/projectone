@@ -1,6 +1,6 @@
 import { BasePage } from './basePage';
-import { test, expect, Locator } from '../fixtures/page.fixtures';
-import { addUser, AdminUser } from '../test-data'
+import { expect } from '../fixtures/page.fixtures';
+import { AdminUser } from '../test-data'
 
 export class AdminPage extends BasePage {
     // Locators
@@ -15,36 +15,36 @@ export class AdminPage extends BasePage {
     get searchUsername() {return this.page.locator("//label[normalize-space()='Username']/ancestor::div[contains(@class,'oxd-input-group')]//input")}
     get searchButton() {return this.page.getByRole('button', {name: 'Search', exact: true})}
     userRow(username: string) {return this.page.locator(`//div[@role='row'][.//*[normalize-space()='${username}']]`)}
-    
+    deleteUserRow(username: string) {return this.userRow(username).locator('button:has(.bi-trash)')}
 
     // Methods
     async selectDropdown(label: string, option: string) {
-    await this.page.locator(`//label[normalize-space()='${label}']/ancestor::div[contains(@class,'oxd-input-group')]//div[contains(@class,'oxd-select-text-input')]`).click();
-    await this.page.locator(`//div[@role='option']//span[normalize-space()='${option}']`).click();
+        await this.page.locator(`//label[normalize-space()='${label}']/ancestor::div[contains(@class,'oxd-input-group')]//div[contains(@class,'oxd-select-text-input')]`).click();
+        await this.page.locator(`//div[@role='option']//span[normalize-space()='${option}']`).click();
     }
 
     async createUser(user: AdminUser) {
-    await this.addButton.first().click()
-    await this.waitFor()
-    await expect(this.addUserHeader).toBeVisible();
-    await this.selectDropdown('User Role', user.userRole);
-    await this.employeeName.fill(user.employeeName);
-    await this.waitFor()
-    await this.page.waitForLoadState('domcontentloaded')
-    await this.page.getByRole('option').first().click();
-    await this.selectDropdown('Status', user.status);
-    await this.username.fill(user.username);
-    await this.password.fill(user.password);
-    await this.confirmPassword.fill(user.password);
-    await this.saveButton.click();
-    await this.waitFor()
-    await this.page.waitForLoadState('domcontentloaded')
+        await this.addButton.first().click()
+        await this.waitFor()
+        await expect(this.addUserHeader).toBeVisible();
+        await this.selectDropdown('User Role', user.userRole);
+        await this.employeeName.fill(user.employeeName);
+        await this.waitFor()
+        await this.page.waitForLoadState('domcontentloaded')
+        await this.page.getByRole('option').first().click();
+        await this.selectDropdown('Status', user.status);
+        await this.username.fill(user.username);
+        await this.password.fill(user.password);
+        await this.confirmPassword.fill(user.password);
+        await this.saveButton.click();
+        await this.waitFor()
+        await this.page.waitForLoadState('domcontentloaded')
     }
 
     async searchUser(username: string) {
-    await this.waitFor()
-    await this.searchUsername.fill(username);
-    await this.searchButton.click();
+        await this.waitFor()
+        await this.searchUsername.fill(username);
+        await this.searchButton.click();
     }
 
 }

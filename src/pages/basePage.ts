@@ -1,8 +1,11 @@
 import { Page, expect } from "@playwright/test";
 import { type SideNavigation, HeaderTitle } from '../test-data/data';
+import { dialog } from "../components/dialog";
 
 export class BasePage {
   constructor(readonly page: Page) {}
+
+  get dialog () { return new dialog (this.page)}
 
   get sideNavigationLocator() { return this.page.locator('#app [role="navigation"]').first(); }
   get headerTitle() { return this.page.locator('#app span h6')}
