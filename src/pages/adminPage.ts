@@ -53,20 +53,26 @@ export class AdminPage extends BasePage {
         await this.page.waitForLoadState('domcontentloaded');
 
         if (updates.userRole) {
+            await this.waitFor()
             await this.selectDropdown('User Role', updates.userRole);
         }
         if (updates.status) {
+            await this.waitFor()
             await this.selectDropdown('Status', updates.status);
         }
         if (updates.username) {
-        await this.username.fill(updates.username);
+            await this.waitFor()
+            await this.username.fill(updates.username);
+            
         }
         if (updates.password) {
+            await this.waitFor()
             await this.password.fill(updates.password);
             await this.confirmPassword.fill(updates.password);
         }
         await this.saveButton.click();
         await this.page.waitForLoadState('domcontentloaded')
+        await this.waitFor()
     }
 
 }
