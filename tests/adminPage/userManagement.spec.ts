@@ -76,6 +76,24 @@ test.describe('user management - admin tests', () => {
         await expect(adminPage.userRow(user.username)).toHaveCount(0)
     })
 
+    test('search invalid userrole', async({dashboardPage,adminPage}) => {
+        const user = createAdminOrEssUser(userRole.admin)
+        await dashboardPage.navigateThroughSideBar(sideNavigation.admin)
+        await adminPage.createUser(user)
+        await adminPage.waitFor()
+        await adminPage.searchUsername.fill(user.username)
+        await adminPage.selectDropdown('User Role', userRole.ess)
+        await adminPage.searchButton.click()
+        await expect(adminPage.userRow(user.username)).not.toBeVisible()
+        await adminPage.resetButton.click()
+        await adminPage.waitFor()
+        await adminPage.searchUser(user.username)
+        await adminPage.deleteUserRow(user.username).click()
+        await adminPage.dialog.confirmButton(dialogButtonText.yesDelete).click()
+        await adminPage.waitFor()
+        await expect(adminPage.userRow(user.username)).toHaveCount(0)
+    })
+
     test('search user by userrole', async({dashboardPage,adminPage}) => {
         const user = createAdminOrEssUser(userRole.admin)
         await dashboardPage.navigateThroughSideBar(sideNavigation.admin);
@@ -109,7 +127,29 @@ test.describe('user management - admin tests', () => {
         await expect(adminPage.userRow(user.username)).toHaveCount(0)
     })
 
-        test('search user by status', async({dashboardPage,adminPage}) => {
+    test('search invalid employeename', async({dashboardPage,adminPage}) => {
+        const user = createAdminOrEssUser(userRole.admin)
+        await dashboardPage.navigateThroughSideBar(sideNavigation.admin)
+        await adminPage.createUser(user)
+        await adminPage.waitFor()
+        await adminPage.searchUsername.fill(user.username)
+        await adminPage.employeeName.fill('m');
+        await adminPage.waitFor()
+        await adminPage.page.waitForLoadState('domcontentloaded')
+        await adminPage.page.getByRole('option').first().click()
+        await adminPage.searchButton.click()
+        await adminPage.waitFor()
+        await expect(adminPage.userRow(user.username)).not.toBeVisible()
+        await adminPage.resetButton.click()
+        await adminPage.waitFor()
+        await adminPage.searchUser(user.username)
+        await adminPage.deleteUserRow(user.username).click()
+        await adminPage.dialog.confirmButton(dialogButtonText.yesDelete).click()
+        await adminPage.waitFor()
+        await expect(adminPage.userRow(user.username)).toHaveCount(0)
+    })
+
+    test('search user by status', async({dashboardPage,adminPage}) => {
         const user = createAdminOrEssUser(userRole.admin)
         await dashboardPage.navigateThroughSideBar(sideNavigation.admin);
         await adminPage.createUser(user);
@@ -118,6 +158,25 @@ test.describe('user management - admin tests', () => {
         await adminPage.searchButton.click();
         await expect(adminPage.userRow(user.username)).toBeVisible();
         await expect(adminPage.userRow(user.username)).toHaveCount(1)
+        await adminPage.deleteUserRow(user.username).click()
+        await adminPage.dialog.confirmButton(dialogButtonText.yesDelete).click()
+        await adminPage.waitFor()
+        await expect(adminPage.userRow(user.username)).toHaveCount(0)
+    })
+
+    test('search invalid status', async({dashboardPage,adminPage}) => {
+        const user = createAdminOrEssUser(userRole.admin)
+        await dashboardPage.navigateThroughSideBar(sideNavigation.admin)
+        await adminPage.createUser(user)
+        await adminPage.waitFor()
+        await adminPage.searchUsername.fill(user.username)
+        await adminPage.selectDropdown('Status', 'Disabled');
+        await adminPage.searchButton.click()
+        await adminPage.waitFor()
+        await expect(adminPage.userRow(user.username)).not.toBeVisible()
+        await adminPage.resetButton.click()
+        await adminPage.waitFor()
+        await adminPage.searchUser(user.username)
         await adminPage.deleteUserRow(user.username).click()
         await adminPage.dialog.confirmButton(dialogButtonText.yesDelete).click()
         await adminPage.waitFor()
@@ -140,5 +199,5 @@ test.describe('user management - admin tests', () => {
         await adminPage.dialog.confirmButton(dialogButtonText.yesDelete).click()
         await adminPage.searchUser(updatedUserName);
         await expect(adminPage.userRow(updatedUserName)).toHaveCount(0);
-          })
+        })
 }) 
