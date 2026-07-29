@@ -14,6 +14,7 @@ export class AdminPage extends BasePage {
     get saveButton() {return this.page.getByRole('button', {name: 'Save',exact: true})}
     get searchUsername() {return this.page.locator("//label[normalize-space()='Username']/ancestor::div[contains(@class,'oxd-input-group')]//input")}
     get searchButton() {return this.page.getByRole('button', {name: 'Search', exact: true})}
+    get resetButton() {return this.page.getByRole('button', {name: 'Reset', exact: true})}
     userRow(username: string) {return this.page.locator(`//div[@role='row'][.//*[normalize-space()='${username}']]`)}
     deleteUserRow(username: string) {return this.userRow(username).locator('button:has(.bi-trash)')}
     editUserRow(username: string) {return this.userRow(username).locator('button:has(.bi-pencil-fill)')}
